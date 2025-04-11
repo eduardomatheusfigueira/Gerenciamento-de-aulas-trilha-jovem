@@ -67,7 +67,7 @@ const DashboardPage: React.FC = () => {
   const totalHorasAlocadas = totalAgendamentos * 4; // Assuming 4 hours per agendamento
 
   let totalHorasMinistradas = 0;
-  const now = new Date();
+  // const now = new Date(); // Removed unused variable
 
   dados.agendamentos.forEach(agendamento => {
     try {
