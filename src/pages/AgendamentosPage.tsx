@@ -212,11 +212,17 @@ const AgendamentosPage: React.FC = () => {
         <h2 className="text-2xl font-bold text-indigo-700">Gerenciar Agendamentos</h2>
         <button
           onClick={() => { setIsEditing(false); setCurrentAgendamento({ oficinaId: 0, educadorId: 0, turmaId: 0, horaInicio: '', horaFim: '', observacoes: '' }); setDates(['']); setIsModalOpen(true); }}
-          className="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+          // Refined Primary Button Style
+          className="inline-flex items-center justify-center px-5 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
         >
           <FontAwesomeIcon icon={faPlus} className="mr-2" /> Adicionar Agendamento
         </button>
       </div>
+
+      {/* Introduction Text */}
+      <p className="text-gray-600 mb-6 text-sm">
+        Visualize e gerencie os agendamentos das oficinas para as turmas. Utilize os filtros para refinar a visualização e alterne entre a lista e o calendário. Adicione novos agendamentos ou edite os existentes clicando nos itens do calendário ou nos botões da lista.
+      </p>
 
       {/* Filters and View Toggle Section */}
       <div className="mb-6 bg-white p-4 rounded-lg shadow-md border border-gray-200">
@@ -439,9 +445,11 @@ const AgendamentosPage: React.FC = () => {
           </div>
           {/* Row 4: Buttons */}
           <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 mt-4">
+            {/* Refined Secondary Button Style */}
             <button type="button" onClick={resetForm} className="inline-flex justify-center py-2 px-5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
                 Cancelar
               </button>
+            {/* Refined Primary Button Style */}
             <button type="submit" className="inline-flex justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
               {isEditing ? 'Salvar Alterações' : 'Adicionar Agendamento(s)'}
             </button>

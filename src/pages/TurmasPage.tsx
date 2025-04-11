@@ -47,7 +47,6 @@ const TurmasPage: React.FC = () => {
   }, []);
 
   const handleDelete = (id: number) => {
-    // Confirmation and dependency check are handled in context
     deleteTurma(id);
   };
 
@@ -60,12 +59,12 @@ const TurmasPage: React.FC = () => {
 
     try {
         if (isEditing && currentTurma.id != null) {
-          updateTurma(currentTurma as Turma); // Call update function (returns void)
+          updateTurma(currentTurma as Turma);
         } else {
           const { id, ...newTurmaData } = currentTurma;
-          addTurma(newTurmaData); // Call add function (returns void)
+          addTurma(newTurmaData);
         }
-        resetForm(); // Close modal and clear form on success
+        resetForm();
     } catch (error) {
         console.error("Erro ao salvar turma:", error);
         // alert("Ocorreu um erro ao salvar a turma.");
@@ -79,19 +78,31 @@ const TurmasPage: React.FC = () => {
 
   return (
     <div className="p-6"> {/* Main Page Container */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-4"> {/* Reduced bottom margin */}
         <h2 className="text-2xl font-bold text-indigo-700">Gerenciar Turmas</h2>
         <button
-          onClick={() => { setIsEditing(false); setIsModalOpen(true); }} // Open modal for adding
-          className="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+          onClick={() => { setIsEditing(false); setIsModalOpen(true); }}
+          // Refined Primary Button Style
+          className="inline-flex items-center justify-center px-5 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
         >
           <FontAwesomeIcon icon={faPlus} className="mr-2" /> Adicionar Turma
         </button>
       </div>
 
+       {/* Introduction Text */}
+       <p className="text-gray-600 mb-6 text-sm">
+        Cadastre e gerencie as turmas que participarão das oficinas. Você pode adicionar, editar ou remover turmas nesta seção.
+      </p>
+
       {/* Turma List Table */}
       <div className="bg-white shadow-md rounded-lg overflow-x-auto border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full divide-y divide-gray-200 table-fixed"> {/* Added table-fixed */}
+           <colgroup> {/* Define column widths */}
+            <col style={{ width: '30%' }} />
+            <col style={{ width: '20%' }} />
+            <col style={{ width: '35%' }} />
+            <col style={{ width: '15%' }} />
+          </colgroup>
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
@@ -111,9 +122,9 @@ const TurmasPage: React.FC = () => {
                   key={turma.id}
                   className={`${index % 2 !== 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-indigo-50 transition duration-150 ease-in-out`}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{turma.nome}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{turma.nome}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{turma.periodo || "-"}</td>
-                  <td className="px-6 py-4 whitespace-normal text-sm text-gray-500 max-w-xs truncate" title={turma.observacoes}>{turma.observacoes || "-"}</td>
+                  <td className="px-6 py-4 whitespace-normal text-sm text-gray-500" title={turma.observacoes}>{turma.observacoes || "-"}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
                       onClick={() => handleEdit(turma)}
@@ -143,8 +154,8 @@ const TurmasPage: React.FC = () => {
         onClose={resetForm}
         title={isEditing ? 'Editar Turma' : 'Adicionar Nova Turma'}
       >
+        {/* Simple vertical stack for form fields */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label htmlFor="modal-nome" className="block text-sm font-medium text-gray-700">Nome da Turma</label>
               <input
@@ -169,8 +180,7 @@ const TurmasPage: React.FC = () => {
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-white p-2"
               />
             </div>
-          </div>
-          <div>
+           <div>
             <label htmlFor="modal-observacoes" className="block text-sm font-medium text-gray-700">Observações (opcional)</label>
             <textarea
               id="modal-observacoes"
@@ -178,10 +188,11 @@ const TurmasPage: React.FC = () => {
               value={currentTurma.observacoes || ''}
               onChange={handleInputChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-white p-2"
-              rows={3}
+              rows={4}
             ></textarea>
           </div>
           <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 mt-4">
+            {/* Refined Secondary Button Style */}
             <button
               type="button"
               onClick={resetForm}
@@ -189,6 +200,7 @@ const TurmasPage: React.FC = () => {
             >
               Cancelar
             </button>
+            {/* Refined Primary Button Style */}
             <button
               type="submit"
               className="inline-flex justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"

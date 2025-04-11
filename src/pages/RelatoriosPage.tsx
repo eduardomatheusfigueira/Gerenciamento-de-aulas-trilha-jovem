@@ -190,13 +190,18 @@ const RelatoriosPage: React.FC = () => {
 
   return (
     <div className="p-6"> {/* Added padding */}
-      <h2 className="text-2xl font-bold mb-6 text-indigo-700">Relatórios</h2> {/* Increased margin */}
+      <h2 className="text-2xl font-bold mb-4 text-indigo-700">Relatórios</h2> {/* Reduced margin for intro */}
+      
+      {/* Introduction Text */}
+      <p className="text-gray-600 mb-6 text-sm">
+        Gere relatórios para visualizar informações consolidadas sobre educadores, oficinas e turmas. Selecione os filtros desejados e clique em "Gerar" para visualizar os dados.
+      </p>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"> {/* Adjusted grid and gap */}
         
         {/* Carga Horária por Educador Section */}
-        <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200"> {/* Styled container */}
-          <h3 className="font-semibold text-xl mb-4 text-gray-800">Carga Horária por Educador</h3> {/* Styled heading */}
+        <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Carga Horária por Educador</h3> {/* Consistent heading */}
           <div className="flex space-x-3 mb-4">
              <select 
                value={educadorPeriodo} 
@@ -207,26 +212,28 @@ const RelatoriosPage: React.FC = () => {
                 <option value="mes">Este mês</option>
                 <option value="semana">Esta semana</option>
              </select>
-             <button onClick={gerarRelatorioEducador} className="inline-flex justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">Gerar</button>
+            {/* Refined Primary Button Style */}
+            <button onClick={gerarRelatorioEducador} className="inline-flex justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">Gerar</button>
           </div>
-          <div className="bg-gray-50 p-4 rounded-md border border-gray-200 min-h-[150px] max-h-96 overflow-y-auto"> {/* Styled display area */}
-            {educadorReport === null ? (
-                <p className="text-gray-500">Selecione um período e clique em "Gerar".</p>
-            ) : educadorReport.length === 0 ? (
-                 <p className="text-gray-500">Nenhum dado encontrado.</p>
-            ) : (
+          <div className="bg-gray-50 p-4 rounded-md border border-gray-200 min-h-[150px] max-h-96 overflow-y-auto">
+            {educadorReport === null && (
+                <p className="text-sm text-gray-500 italic">Selecione um período e clique em "Gerar".</p>
+            )}
+            {educadorReport !== null && educadorReport.length === 0 && (
+                 <p className="text-sm text-gray-500 italic">Nenhum dado encontrado para o período selecionado.</p>
+            )}
+            {educadorReport && educadorReport.length > 0 && (
                 <div className="space-y-4">
                     {educadorReport.map(item => (
-                         <div key={item.educador} className="border-b pb-3">
-                            <div className="flex justify-between items-baseline"> {/* Adjusted alignment */}
-                                <h4 className="font-semibold text-md text-gray-800">{item.educador}</h4> {/* Styled name */}
-                                <span className="font-bold text-lg text-indigo-600">{item.horas}h</span> {/* Styled hours */}
+                         <div key={item.educador} className="border-b border-gray-200 pb-3 last:border-b-0"> {/* Added border color, removed last border */}
+                            <div className="flex justify-between items-baseline">
+                                <h4 className="font-semibold text-md text-gray-800">{item.educador}</h4>
+                                <span className="font-bold text-lg text-indigo-600">{item.horas}h</span>
                             </div>
-                             <div className="flex text-xs text-gray-600 mt-1">
-                                <div className="mr-3">{item.totalAgendamentos} agendamentos</div>
-                                <div>{item.oficinasMinistradas} oficinas</div>
+                             <div className="flex text-xs text-gray-600 mt-1 space-x-3">
+                                <span>{item.totalAgendamentos} agendamentos</span>
+                                <span>{item.oficinasMinistradas} oficinas</span>
                             </div>
-                            {/* Optionally display last few agendamentos */}
                         </div>
                     ))}
                 </div>
@@ -235,8 +242,8 @@ const RelatoriosPage: React.FC = () => {
         </div>
         
         {/* Oficinas mais Agendadas Section */}
-         <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200"> {/* Styled container */}
-          <h3 className="font-semibold text-xl mb-4 text-gray-800">Oficinas mais Agendadas</h3> {/* Styled heading */}
+         <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Oficinas mais Agendadas</h3> {/* Consistent heading */}
            <div className="flex space-x-3 mb-4">
              <select 
                value={oficinaPeriodo} 
@@ -247,25 +254,28 @@ const RelatoriosPage: React.FC = () => {
                 <option value="mes">Este mês</option>
                 <option value="semana">Esta semana</option>
              </select>
-             <button onClick={gerarRelatorioOficinas} className="inline-flex justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">Gerar</button>
+            {/* Refined Primary Button Style */}
+            <button onClick={gerarRelatorioOficinas} className="inline-flex justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">Gerar</button>
           </div>
-          <div className="bg-gray-50 p-4 rounded-md border border-gray-200 min-h-[150px] max-h-96 overflow-y-auto"> {/* Styled display area */}
-             {oficinaReport === null ? (
-                <p className="text-gray-500">Selecione um período e clique em "Gerar".</p>
-            ) : oficinaReport.length === 0 ? (
-                 <p className="text-gray-500">Nenhum dado encontrado.</p>
-            ) : (
-                 <table className="min-w-full text-sm"> {/* Increased base text size */}
-                     <thead className="bg-gray-100"> {/* Added thead background */}
+          <div className="bg-gray-50 p-4 rounded-md border border-gray-200 min-h-[150px] max-h-96 overflow-y-auto">
+             {oficinaReport === null && (
+                <p className="text-sm text-gray-500 italic">Selecione um período e clique em "Gerar".</p>
+             )}
+             {oficinaReport !== null && oficinaReport.length === 0 && (
+                 <p className="text-sm text-gray-500 italic">Nenhum dado encontrado para o período selecionado.</p>
+             )}
+             {oficinaReport && oficinaReport.length > 0 && (
+                 <table className="min-w-full text-sm">
+                     <thead className="bg-gray-100">
                          <tr>
                              <th className="text-left py-2 px-3 font-semibold text-gray-600 uppercase tracking-wider">Oficina</th>
                              <th className="text-center py-2 px-3 font-semibold text-gray-600 uppercase tracking-wider">Agend.</th>
                              <th className="text-center py-2 px-3 font-semibold text-gray-600 uppercase tracking-wider">Horas</th>
                          </tr>
                      </thead>
-                     <tbody>
+                     <tbody className="divide-y divide-gray-200"> {/* Added divide-y */}
                          {oficinaReport.map((item, index) => (
-                             <tr key={item.oficina} className={`${index % 2 !== 0 ? 'bg-gray-100' : 'bg-white'} border-t border-gray-200`}> {/* Added zebra striping */}
+                             <tr key={item.oficina} className={`${index % 2 !== 0 ? 'bg-gray-100' : 'bg-white'} hover:bg-gray-200`}> {/* Added hover */}
                                  <td className="py-2 px-3 font-medium text-gray-800">{item.oficina}</td>
                                  <td className="py-2 px-3 text-center text-gray-600">{item.totalAgendamentos}</td>
                                  <td className="py-2 px-3 text-center text-gray-600">{item.horasMinistradas}h</td>
@@ -273,15 +283,15 @@ const RelatoriosPage: React.FC = () => {
                          ))}
                      </tbody>
                  </table>
-            )}
+             )}
           </div>
         </div>
 
       </div>
 
        {/* Agendamentos por Turma Section */}
-       <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-8 md:col-span-2"> {/* Styled container, span 2 cols on md+ */}
-          <h3 className="font-semibold text-xl mb-4 text-gray-800">Agendamentos por Turma</h3> {/* Styled heading */}
+       <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-8 md:col-span-2">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Agendamentos por Turma</h3> {/* Consistent heading */}
            <div className="flex flex-wrap gap-3 mb-4 items-center">
              <select 
                value={turmaIdFiltro} 
@@ -300,34 +310,39 @@ const RelatoriosPage: React.FC = () => {
                 <option value="mes">Este mês</option>
                 <option value="semana">Esta semana</option>
              </select>
-             <button onClick={gerarRelatorioTurma} className="inline-flex justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">Gerar</button>
+            {/* Refined Primary Button Style */}
+            <button onClick={gerarRelatorioTurma} className="inline-flex justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">Gerar</button>
           </div>
-          <div className="bg-gray-50 p-4 rounded-md border border-gray-200 min-h-[150px] max-h-[500px] overflow-y-auto"> {/* Styled display area, increased max-h */}
-             {turmaReport === null ? (
-                <p className="text-gray-500">Selecione uma turma e período, depois clique em "Gerar".</p>
-            ) : (
+          <div className="bg-gray-50 p-4 rounded-md border border-gray-200 min-h-[150px] max-h-[500px] overflow-y-auto">
+             {turmaReport === null && (
+                <p className="text-sm text-gray-500 italic">Selecione uma turma e período, depois clique em "Gerar".</p>
+             )}
+             {turmaReport && ( // Check if turmaReport is not null before accessing properties
                 <div>
-                    <div className="bg-indigo-100 p-3 rounded-md mb-4 text-sm border border-indigo-200"> {/* Styled summary box */}
-                        <h4 className="font-semibold text-lg text-indigo-800">{turmaReport.turmaNome}</h4>
+                    <div className="bg-indigo-100 p-3 rounded-md mb-4 text-sm border border-indigo-200">
+                        <h4 className="font-semibold text-lg text-indigo-800 mb-1">{turmaReport.turmaNome}</h4>
                         <div className="grid grid-cols-2 gap-x-2 gap-y-1 mt-1 text-xs">
-                            {/* Styled summary details */}
                             <span className="text-indigo-700">Total Horas: <span className="font-medium">{turmaReport.totalHoras}h</span></span>
                             <span className="text-indigo-700">Oficinas: <span className="font-medium">{turmaReport.totalOficinas}</span></span>
                             <span className="text-indigo-700">Educadores: <span className="font-medium">{turmaReport.totalEducadores}</span></span>
                             <span className="text-indigo-700">Dias c/ Aulas: <span className="font-medium">{turmaReport.totalDias}</span></span>
                         </div>
                     </div>
-                    <h5 className="font-semibold text-md mb-2 text-gray-700">Cronograma:</h5> {/* Styled sub-heading */}
+                    <h5 className="font-semibold text-md mb-2 text-gray-700 mt-3">Cronograma:</h5>
                     <ul className="space-y-2">
                         {turmaReport.cronograma.map((item, index) => (
-                            <li key={index} className="border-b border-gray-200 pb-2 mb-2 text-sm"> {/* Adjusted spacing and border */}
+                            <li key={index} className="border-b border-gray-200 pb-2 mb-2 text-sm last:border-b-0 last:pb-0 last:mb-0"> {/* Removed last border/margin */}
                                 <div className="font-semibold text-gray-800">{item.data}</div>
                                 <div className="pl-2 text-gray-600">{item.horario} - {item.oficina} ({item.educador})</div>
                             </li>
                         ))}
                     </ul>
                 </div>
-            )}
+             )}
+             {/* Added case for when report exists but cronograma is empty (though unlikely with current logic) */}
+             {turmaReport && turmaReport.cronograma.length === 0 && (
+                 <p className="text-sm text-gray-500 italic">Nenhum agendamento encontrado para esta turma no período selecionado.</p>
+             )}
           </div>
         </div>
 

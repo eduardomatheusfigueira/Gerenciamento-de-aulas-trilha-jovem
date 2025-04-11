@@ -90,7 +90,12 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div className="p-6"> {/* Added padding to the main container */}
-      <h2 className="text-2xl font-bold mb-6 text-indigo-700">Dashboard</h2> {/* Increased bottom margin */}
+      <h2 className="text-2xl font-bold mb-4 text-indigo-700">Dashboard</h2> {/* Reduced margin for intro */}
+
+      {/* Introduction Text */}
+      <p className="text-gray-600 mb-6 text-sm">
+        Visão geral do sistema com acesso rápido às principais métricas e ao calendário de agendamentos.
+      </p>
       
       {/* Summary Table */}
       <div className="mb-8 overflow-x-auto bg-white rounded-lg shadow-md border border-gray-200">

@@ -48,7 +48,6 @@ const EducadoresPage: React.FC = () => {
   }, []);
 
   const handleDelete = (id: number) => {
-    // Confirmation and dependency check are handled in context
     deleteEducador(id);
   };
 
@@ -61,12 +60,12 @@ const EducadoresPage: React.FC = () => {
 
     try {
         if (isEditing && currentEducador.id != null) {
-          updateEducador(currentEducador as Educador); // Call update function (returns void)
+          updateEducador(currentEducador as Educador);
         } else {
           const { id, ...newEducadorData } = currentEducador;
-          addEducador(newEducadorData); // Call add function (returns void)
+          addEducador(newEducadorData);
         }
-        resetForm(); // Close modal and clear form on success
+        resetForm();
     } catch (error) {
         console.error("Erro ao salvar educador:", error);
         // alert("Ocorreu um erro ao salvar o educador.");
@@ -80,24 +79,36 @@ const EducadoresPage: React.FC = () => {
 
   return (
     <div className="p-6"> {/* Main Page Container */}
-       <div className="flex justify-between items-center mb-6">
+       <div className="flex justify-between items-center mb-4"> {/* Reduced bottom margin */}
         <h2 className="text-2xl font-bold text-indigo-700">Gerenciar Educadores</h2>
         <button
-          onClick={() => { setIsEditing(false); setIsModalOpen(true); }} // Open modal for adding
-          className="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+          onClick={() => { setIsEditing(false); setIsModalOpen(true); }}
+          // Refined Primary Button Style
+          className="inline-flex items-center justify-center px-5 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
         >
           <FontAwesomeIcon icon={faPlus} className="mr-2" /> Adicionar Educador
         </button>
       </div>
 
+      {/* Introduction Text */}
+      <p className="text-gray-600 mb-6 text-sm">
+        Gerencie os educadores cadastrados no sistema. Adicione novos educadores, edite informações existentes ou remova registros conforme necessário.
+      </p>
+
       {/* Educador List Table */}
       <div className="bg-white shadow-md rounded-lg overflow-x-auto border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full divide-y divide-gray-200 table-fixed"> {/* Added table-fixed */}
+          <colgroup> {/* Define column widths */}
+            <col style={{ width: '35%' }} /> {/* Nome */}
+            <col style={{ width: '35%' }} /> {/* Email */}
+            <col style={{ width: '15%' }} /> {/* Telefone */}
+            <col style={{ width: '15%' }} /> {/* Ações */}
+          </colgroup>
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th> {/* Removed w-* class */}
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th> {/* Removed w-* class */}
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th> {/* Removed w-* class */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
             </tr>
           </thead>
@@ -112,8 +123,8 @@ const EducadoresPage: React.FC = () => {
                   key={educador.id}
                   className={`${index % 2 !== 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-indigo-50 transition duration-150 ease-in-out`}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{educador.nome}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{educador.email || "-"}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" title={educador.nome}>{educador.nome}</td> {/* Removed truncate */}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500" title={educador.email}>{educador.email || "-"}</td> {/* Removed truncate */}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{educador.telefone || "-"}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
@@ -144,8 +155,8 @@ const EducadoresPage: React.FC = () => {
         onClose={resetForm}
         title={isEditing ? 'Editar Educador' : 'Adicionar Novo Educador'}
       >
+         {/* Simple vertical stack for form fields */}
          <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label htmlFor="modal-nome" className="block text-sm font-medium text-gray-700">Nome do Educador</label>
               <input
@@ -169,8 +180,7 @@ const EducadoresPage: React.FC = () => {
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-white p-2"
               />
             </div>
-          </div>
-          <div>
+            <div>
             <label htmlFor="modal-telefone" className="block text-sm font-medium text-gray-700">Telefone (opcional)</label>
             <input
               type="tel"
@@ -182,6 +192,7 @@ const EducadoresPage: React.FC = () => {
             />
           </div>
           <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 mt-4">
+            {/* Refined Secondary Button Style */}
             <button
               type="button"
               onClick={resetForm}
@@ -189,6 +200,7 @@ const EducadoresPage: React.FC = () => {
             >
               Cancelar
             </button>
+            {/* Refined Primary Button Style */}
             <button
               type="submit"
               className="inline-flex justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
