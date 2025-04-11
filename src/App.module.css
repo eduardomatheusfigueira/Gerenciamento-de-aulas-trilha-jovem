@@ -1,0 +1,37 @@
+/* Basic App Layout Styles */
+.appContainer {
+  min-height: 100vh;
+  background-color: #f3f4f6; /* gray-100 */
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContentWrapper {
+  display: flex;
+  flex-direction: column; /* Stack nav and main on small screens */
+  flex-grow: 1;
+  padding: 2rem 1rem; /* py-8 px-4 */
+  max-width: 1280px; /* Optional: constrain width */
+  margin: 0 auto; /* Center container */
+  width: 100%;
+}
+
+.mainArea {
+  flex-grow: 1;
+  background-color: white;
+  border-radius: 0.5rem; /* rounded-lg */
+  padding: 1.5rem; /* p-6 */
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-lg */
+}
+
+/* Medium screens and up */
+@media (min-width: 768px) {
+  .mainContentWrapper {
+    flex-direction: row; /* Side-by-side layout */
+    padding: 2rem; /* py-8 px-8 */
+  }
+  .mainArea {
+     margin-left: 2rem; /* ml-8 */
+     margin-top: 0;
+  }
+}
