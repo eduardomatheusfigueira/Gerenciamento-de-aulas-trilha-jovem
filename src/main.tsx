@@ -1,4 +1,5 @@
 import './index.css'; // Keep at the top
+import 'react-big-calendar/lib/css/react-big-calendar.css'; // Add calendar CSS
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';

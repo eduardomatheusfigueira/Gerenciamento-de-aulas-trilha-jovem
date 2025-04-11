@@ -28,10 +28,11 @@
 @media (min-width: 768px) {
   .mainContentWrapper {
     flex-direction: row; /* Side-by-side layout */
-    padding: 2rem; /* py-8 px-8 */
+    /* Removed left padding to bring nav closer to edge */
+    padding: 2rem 2rem 2rem 0; /* py-8 pr-8 pb-8 pl-0 */
   }
   .mainArea {
-     margin-left: 2rem; /* ml-8 */
+     /* margin-left removed; gap is handled by navContainer's margin-right */
      margin-top: 0;
   }
 }

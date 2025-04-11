@@ -1,13 +1,13 @@
 .navContainer {
   /* Adjust width and margin as needed, using flex-shrink to prevent growing */
-  width: 12rem; /* Example width, adjust as needed */
-  margin-right: 2rem; /* md:mr-8 */
+  width: 8rem; /* Reduced width (w-32) */
+  margin-right: 2rem; /* Keep the gap consistent */
   flex-shrink: 0; 
 }
 
 .navLink {
   display: block;
-  padding: 0.5rem 1rem; /* py-2 px-4 */
+  padding: 0.5rem 0.5rem; /* py-2 px-2 (Reduced horizontal padding) */
   margin-bottom: 0.5rem; /* mb-2 */
   border-radius: 0.375rem; /* rounded-lg */
   text-decoration: none;

@@ -189,27 +189,27 @@ const RelatoriosPage: React.FC = () => {
   }
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4 text-indigo-700">Relatórios</h2>
+    <div className="p-6"> {/* Added padding */}
+      <h2 className="text-2xl font-bold mb-6 text-indigo-700">Relatórios</h2> {/* Increased margin */}
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"> {/* Adjusted grid and gap */}
         
-        {/* Carga Horária por Educador */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <h3 className="font-bold text-lg mb-4">Carga Horária por Educador</h3>
+        {/* Carga Horária por Educador Section */}
+        <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200"> {/* Styled container */}
+          <h3 className="font-semibold text-xl mb-4 text-gray-800">Carga Horária por Educador</h3> {/* Styled heading */}
           <div className="flex space-x-3 mb-4">
              <select 
                value={educadorPeriodo} 
                onChange={(e) => setEducadorPeriodo(e.target.value as typeof educadorPeriodo)}
-               className="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-white border p-2"
+               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-white p-2"
              >
                 <option value="todos">Todo o período</option>
                 <option value="mes">Este mês</option>
                 <option value="semana">Esta semana</option>
              </select>
-             <button onClick={gerarRelatorioEducador} className="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700">Gerar</button>
+             <button onClick={gerarRelatorioEducador} className="inline-flex justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">Gerar</button>
           </div>
-          <div className="bg-gray-50 p-3 rounded min-h-[150px] max-h-96 overflow-y-auto">
+          <div className="bg-gray-50 p-4 rounded-md border border-gray-200 min-h-[150px] max-h-96 overflow-y-auto"> {/* Styled display area */}
             {educadorReport === null ? (
                 <p className="text-gray-500">Selecione um período e clique em "Gerar".</p>
             ) : educadorReport.length === 0 ? (
@@ -218,9 +218,9 @@ const RelatoriosPage: React.FC = () => {
                 <div className="space-y-4">
                     {educadorReport.map(item => (
                          <div key={item.educador} className="border-b pb-3">
-                            <div className="flex justify-between items-center">
-                                <h4 className="font-bold text-md">{item.educador}</h4>
-                                <span className="font-bold text-indigo-700">{item.horas}h</span>
+                            <div className="flex justify-between items-baseline"> {/* Adjusted alignment */}
+                                <h4 className="font-semibold text-md text-gray-800">{item.educador}</h4> {/* Styled name */}
+                                <span className="font-bold text-lg text-indigo-600">{item.horas}h</span> {/* Styled hours */}
                             </div>
                              <div className="flex text-xs text-gray-600 mt-1">
                                 <div className="mr-3">{item.totalAgendamentos} agendamentos</div>
@@ -234,41 +234,41 @@ const RelatoriosPage: React.FC = () => {
           </div>
         </div>
         
-        {/* Oficinas mais Agendadas */}
-         <div className="bg-white p-4 rounded-lg shadow">
-          <h3 className="font-bold text-lg mb-4">Oficinas mais Agendadas</h3>
+        {/* Oficinas mais Agendadas Section */}
+         <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200"> {/* Styled container */}
+          <h3 className="font-semibold text-xl mb-4 text-gray-800">Oficinas mais Agendadas</h3> {/* Styled heading */}
            <div className="flex space-x-3 mb-4">
              <select 
                value={oficinaPeriodo} 
                onChange={(e) => setOficinaPeriodo(e.target.value as typeof oficinaPeriodo)}
-               className="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-white border p-2"
+               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-white p-2"
              >
                 <option value="todos">Todo o período</option>
                 <option value="mes">Este mês</option>
                 <option value="semana">Esta semana</option>
              </select>
-             <button onClick={gerarRelatorioOficinas} className="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700">Gerar</button>
+             <button onClick={gerarRelatorioOficinas} className="inline-flex justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">Gerar</button>
           </div>
-          <div className="bg-gray-50 p-3 rounded min-h-[150px] max-h-96 overflow-y-auto">
+          <div className="bg-gray-50 p-4 rounded-md border border-gray-200 min-h-[150px] max-h-96 overflow-y-auto"> {/* Styled display area */}
              {oficinaReport === null ? (
                 <p className="text-gray-500">Selecione um período e clique em "Gerar".</p>
             ) : oficinaReport.length === 0 ? (
                  <p className="text-gray-500">Nenhum dado encontrado.</p>
             ) : (
-                 <table className="min-w-full text-xs">
-                     <thead>
+                 <table className="min-w-full text-sm"> {/* Increased base text size */}
+                     <thead className="bg-gray-100"> {/* Added thead background */}
                          <tr>
-                             <th className="text-left py-1">Oficina</th>
-                             <th className="text-left py-1">Agend.</th>
-                             <th className="text-left py-1">Horas</th>
+                             <th className="text-left py-2 px-3 font-semibold text-gray-600 uppercase tracking-wider">Oficina</th>
+                             <th className="text-center py-2 px-3 font-semibold text-gray-600 uppercase tracking-wider">Agend.</th>
+                             <th className="text-center py-2 px-3 font-semibold text-gray-600 uppercase tracking-wider">Horas</th>
                          </tr>
                      </thead>
                      <tbody>
-                         {oficinaReport.map(item => (
-                             <tr key={item.oficina} className="border-t">
-                                 <td className="py-1 font-medium">{item.oficina}</td>
-                                 <td className="py-1">{item.totalAgendamentos}</td>
-                                 <td className="py-1">{item.horasMinistradas}h</td>
+                         {oficinaReport.map((item, index) => (
+                             <tr key={item.oficina} className={`${index % 2 !== 0 ? 'bg-gray-100' : 'bg-white'} border-t border-gray-200`}> {/* Added zebra striping */}
+                                 <td className="py-2 px-3 font-medium text-gray-800">{item.oficina}</td>
+                                 <td className="py-2 px-3 text-center text-gray-600">{item.totalAgendamentos}</td>
+                                 <td className="py-2 px-3 text-center text-gray-600">{item.horasMinistradas}h</td>
                              </tr>
                          ))}
                      </tbody>
@@ -279,14 +279,14 @@ const RelatoriosPage: React.FC = () => {
 
       </div>
 
-       {/* Agendamentos por Turma */}
-       <div className="bg-white p-4 rounded-lg shadow mb-8">
-          <h3 className="font-bold text-lg mb-4">Agendamentos por Turma</h3>
+       {/* Agendamentos por Turma Section */}
+       <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-8 md:col-span-2"> {/* Styled container, span 2 cols on md+ */}
+          <h3 className="font-semibold text-xl mb-4 text-gray-800">Agendamentos por Turma</h3> {/* Styled heading */}
            <div className="flex flex-wrap gap-3 mb-4 items-center">
              <select 
                value={turmaIdFiltro} 
                onChange={(e) => setTurmaIdFiltro(e.target.value)}
-               className="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-white border p-2"
+               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-white p-2"
              >
                  <option value="">Selecione uma turma...</option>
                  {dados.turmas.map(t => <option key={t.id} value={t.id}>{t.nome}</option>)}
@@ -294,34 +294,35 @@ const RelatoriosPage: React.FC = () => {
              <select 
                value={turmaPeriodo} 
                onChange={(e) => setTurmaPeriodo(e.target.value as typeof turmaPeriodo)}
-               className="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-white border p-2"
+               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-white p-2"
              >
                 <option value="todos">Todo o período</option>
                 <option value="mes">Este mês</option>
                 <option value="semana">Esta semana</option>
              </select>
-             <button onClick={gerarRelatorioTurma} className="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700">Gerar</button>
+             <button onClick={gerarRelatorioTurma} className="inline-flex justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">Gerar</button>
           </div>
-          <div className="bg-gray-50 p-3 rounded min-h-[150px] max-h-96 overflow-y-auto">
+          <div className="bg-gray-50 p-4 rounded-md border border-gray-200 min-h-[150px] max-h-[500px] overflow-y-auto"> {/* Styled display area, increased max-h */}
              {turmaReport === null ? (
                 <p className="text-gray-500">Selecione uma turma e período, depois clique em "Gerar".</p>
             ) : (
                 <div>
-                    <div className="bg-indigo-50 p-2 rounded mb-3 text-sm">
-                        <h4 className="font-bold">{turmaReport.turmaNome}</h4>
+                    <div className="bg-indigo-100 p-3 rounded-md mb-4 text-sm border border-indigo-200"> {/* Styled summary box */}
+                        <h4 className="font-semibold text-lg text-indigo-800">{turmaReport.turmaNome}</h4>
                         <div className="grid grid-cols-2 gap-x-2 gap-y-1 mt-1 text-xs">
-                            <span>Total Horas: {turmaReport.totalHoras}h</span>
-                            <span>Oficinas: {turmaReport.totalOficinas}</span>
-                            <span>Educadores: {turmaReport.totalEducadores}</span>
-                            <span>Dias c/ Aulas: {turmaReport.totalDias}</span>
+                            {/* Styled summary details */}
+                            <span className="text-indigo-700">Total Horas: <span className="font-medium">{turmaReport.totalHoras}h</span></span>
+                            <span className="text-indigo-700">Oficinas: <span className="font-medium">{turmaReport.totalOficinas}</span></span>
+                            <span className="text-indigo-700">Educadores: <span className="font-medium">{turmaReport.totalEducadores}</span></span>
+                            <span className="text-indigo-700">Dias c/ Aulas: <span className="font-medium">{turmaReport.totalDias}</span></span>
                         </div>
                     </div>
-                    <h5 className="font-semibold text-sm mb-2">Cronograma:</h5>
+                    <h5 className="font-semibold text-md mb-2 text-gray-700">Cronograma:</h5> {/* Styled sub-heading */}
                     <ul className="space-y-2">
                         {turmaReport.cronograma.map((item, index) => (
-                            <li key={index} className="border-b pb-1 text-xs">
-                                <div className="font-medium">{item.data}</div>
-                                <div className="pl-2">{item.horario} - {item.oficina} ({item.educador})</div>
+                            <li key={index} className="border-b border-gray-200 pb-2 mb-2 text-sm"> {/* Adjusted spacing and border */}
+                                <div className="font-semibold text-gray-800">{item.data}</div>
+                                <div className="pl-2 text-gray-600">{item.horario} - {item.oficina} ({item.educador})</div>
                             </li>
                         ))}
                     </ul>

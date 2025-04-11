@@ -1,4 +1,8 @@
-/* Tailwind directives removed. Add base styles or component styles here later if needed. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tailwind directives restored above. */
 
 /* Example base styles (optional) */
 body {
@@ -9,4 +13,35 @@ body {
   line-height: 1.5;
   background-color: #f3f4f6; /* Equivalent to bg-gray-100 */
   color: #1f2937; /* Equivalent to text-gray-800 */
+}
+
+/* Overrides for react-big-calendar to make it more compact */
+.rbc-header {
+  padding: 4px 3px; /* Reduce header padding */
+  font-size: 0.75rem; /* Smaller header font size */
+}
+
+.rbc-event, .rbc-day-slot .rbc-background-event {
+  padding: 1px 4px; /* Reduce event padding */
+  font-size: 0.7rem; /* Smaller event font size */
+  line-height: 1.2;
+}
+
+.rbc-agenda-table th, .rbc-agenda-table td {
+   padding: 3px 5px; /* Reduce agenda view padding */
+   font-size: 0.8rem; /* Smaller agenda font size */
+}
+
+.rbc-time-view .rbc-time-gutter {
+  font-size: 0.7rem; /* Smaller time gutter font */
+}
+
+.rbc-toolbar button {
+  padding: 4px 8px; /* Smaller toolbar buttons */
+  font-size: 0.8rem;
+}
+
+.rbc-toolbar .rbc-toolbar-label {
+   font-size: 0.9rem; /* Smaller toolbar label */
+   padding: 0 5px;
 }

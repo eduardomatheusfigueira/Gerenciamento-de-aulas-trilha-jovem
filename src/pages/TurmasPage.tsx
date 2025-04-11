@@ -1,28 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useData } from '../context/DataContext';
 import { Turma } from '../interfaces/Turma';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import Modal from '../components/Modal'; // Import Modal
 
 // Define the type for the form state
-type TurmaFormData = Omit<Turma, 'id'> & { id?: number }; // id is optional
+type TurmaFormData = Omit<Turma, 'id'> & { id?: number };
 
 const TurmasPage: React.FC = () => {
   const { dados, isLoading, addTurma, updateTurma, deleteTurma } = useData();
   const [isEditing, setIsEditing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal
   const [currentTurma, setCurrentTurma] = useState<TurmaFormData>({
     nome: '',
     periodo: '',
     observacoes: '',
   });
 
-  // Effect to reset form when switching between add/edit or when data loads
-  useEffect(() => {
-    if (!isEditing) {
-      resetForm();
-    }
-  }, [isEditing, isLoading]);
-
+  // --- Form Handling ---
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setCurrentTurma((prev: TurmaFormData) => ({
@@ -34,143 +30,104 @@ const TurmasPage: React.FC = () => {
   const resetForm = () => {
     setIsEditing(false);
     setCurrentTurma({ nome: '', periodo: '', observacoes: '' });
+    setIsModalOpen(false); // Close modal on reset
   };
 
-  const handleEdit = (turma: Turma) => {
+  // Effect to reset form fields when modal closes (if not editing)
+  useEffect(() => {
+    if (!isModalOpen && !isEditing) {
+        setCurrentTurma({ nome: '', periodo: '', observacoes: '' });
+    }
+  }, [isModalOpen, isEditing]);
+
+  const handleEdit = useCallback((turma: Turma) => {
     setIsEditing(true);
     setCurrentTurma({ ...turma }); // Load existing data into form
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to form for editing
-  };
+    setIsModalOpen(true); // Open modal for editing
+  }, []);
 
   const handleDelete = (id: number) => {
     // Confirmation and dependency check are handled in context
-    deleteTurma(id); 
+    deleteTurma(id);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentTurma.nome) {
-      alert('Por favor, preencha o nome da turma.'); // Replace with Snackbar later
+      alert('Por favor, preencha o nome da turma.');
       return;
     }
 
-    if (isEditing && currentTurma.id != null) {
-      updateTurma(currentTurma as Turma); // Type assertion okay as id is checked
-    } else {
-      const { id, ...newTurmaData } = currentTurma;
-      addTurma(newTurmaData);
+    try {
+        if (isEditing && currentTurma.id != null) {
+          updateTurma(currentTurma as Turma); // Call update function (returns void)
+        } else {
+          const { id, ...newTurmaData } = currentTurma;
+          addTurma(newTurmaData); // Call add function (returns void)
+        }
+        resetForm(); // Close modal and clear form on success
+    } catch (error) {
+        console.error("Erro ao salvar turma:", error);
+        // alert("Ocorreu um erro ao salvar a turma.");
     }
-    resetForm(); // Clear form after submission
   };
 
+  // --- Render ---
   if (isLoading) {
-    return <div>Carregando turmas...</div>;
+    return <div className="p-6">Carregando turmas...</div>;
   }
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4 text-indigo-700">Gerenciar Turmas</h2>
-      
-      {/* Add/Edit Form */}
-      <div className="bg-indigo-50 p-4 rounded-lg mb-6 shadow"> {/* Added shadow */}
-        <h3 className="font-bold text-lg mb-2">{isEditing ? 'Editar Turma' : 'Adicionar Nova Turma'}</h3>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="nome" className="block text-sm font-medium text-gray-700">Nome da Turma</label>
-              <input 
-                type="text" 
-                id="nome" 
-                name="nome" 
-                value={currentTurma.nome}
-                onChange={handleInputChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-white border p-2" 
-                required 
-              />
-            </div>
-            <div>
-              <label htmlFor="periodo" className="block text-sm font-medium text-gray-700">Período</label>
-              <input 
-                type="text" 
-                id="periodo" 
-                name="periodo" 
-                placeholder="Ex: Manhã, Tarde, 2024.1"
-                value={currentTurma.periodo || ''}
-                onChange={handleInputChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-white border p-2" 
-              />
-            </div>
-          </div>
-          <div>
-            <label htmlFor="observacoes" className="block text-sm font-medium text-gray-700">Observações (opcional)</label>
-            <textarea 
-              id="observacoes" 
-              name="observacoes" 
-              value={currentTurma.observacoes || ''}
-              onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-white border p-2" 
-              rows={2}
-            ></textarea>
-          </div>
-          <div className="flex items-center space-x-3 pt-2"> {/* Added pt-2 */}
-            <button 
-              type="submit" 
-              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              {isEditing ? 'Salvar Alterações' : 'Adicionar Turma'}
-            </button>
-            {isEditing && (
-              <button 
-                type="button" 
-                onClick={resetForm}
-                className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Cancelar Edição
-              </button>
-            )}
-          </div>
-        </form>
+    <div className="p-6"> {/* Main Page Container */}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-indigo-700">Gerenciar Turmas</h2>
+        <button
+          onClick={() => { setIsEditing(false); setIsModalOpen(true); }} // Open modal for adding
+          className="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+        >
+          <FontAwesomeIcon icon={faPlus} className="mr-2" /> Adicionar Turma
+        </button>
       </div>
-      
+
       {/* Turma List Table */}
-      <div className="bg-white shadow rounded-lg overflow-x-auto"> {/* Added overflow-x-auto */}
+      <div className="bg-white shadow-md rounded-lg overflow-x-auto border border-gray-200">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50"> {/* Added standard thead background */}
+          <thead className="bg-gray-50">
             <tr>
-              {/* Added standard table header styling */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Período</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Observações</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200"> {/* Added standard tbody styling */}
+          <tbody className="bg-white divide-y divide-gray-200">
             {dados.turmas.length === 0 ? (
               <tr>
-                 {/* Adjusted colspan and styling for empty state */}
                 <td className="px-6 py-4 text-center text-sm text-gray-500" colSpan={4}>Nenhuma turma cadastrada</td>
               </tr>
             ) : (
-              dados.turmas.map(turma => (
-                <tr key={turma.id}>
-                   {/* Added standard table cell padding */}
+              dados.turmas.map((turma, index) => (
+                <tr
+                  key={turma.id}
+                  className={`${index % 2 !== 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-indigo-50 transition duration-150 ease-in-out`}
+                >
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{turma.nome}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{turma.periodo || "-"}</td>
                   <td className="px-6 py-4 whitespace-normal text-sm text-gray-500 max-w-xs truncate" title={turma.observacoes}>{turma.observacoes || "-"}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button 
-                      onClick={() => handleEdit(turma)} 
-                      className="text-indigo-600 hover:text-indigo-900 mr-3"
+                    <button
+                      onClick={() => handleEdit(turma)}
+                      className="text-indigo-600 hover:text-indigo-800 mr-4 transition duration-150 ease-in-out"
                       title="Editar"
                     >
-                      <FontAwesomeIcon icon={faEdit} />
+                      <FontAwesomeIcon icon={faEdit} size="lg" />
                     </button>
-                    <button 
-                      onClick={() => handleDelete(turma.id)} 
-                      className="text-red-600 hover:text-red-900"
+                    <button
+                      onClick={() => handleDelete(turma.id)}
+                      className="text-red-600 hover:text-red-800 transition duration-150 ease-in-out"
                       title="Excluir"
                     >
-                      <FontAwesomeIcon icon={faTrashAlt} />
+                      <FontAwesomeIcon icon={faTrashAlt} size="lg" />
                     </button>
                   </td>
                 </tr>
@@ -179,7 +136,70 @@ const TurmasPage: React.FC = () => {
           </tbody>
         </table>
       </div>
-    </div>
+
+      {/* Modal for Add/Edit Form */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={resetForm}
+        title={isEditing ? 'Editar Turma' : 'Adicionar Nova Turma'}
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="modal-nome" className="block text-sm font-medium text-gray-700">Nome da Turma</label>
+              <input
+                type="text"
+                id="modal-nome"
+                name="nome"
+                value={currentTurma.nome}
+                onChange={handleInputChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-white p-2"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="modal-periodo" className="block text-sm font-medium text-gray-700">Período</label>
+              <input
+                type="text"
+                id="modal-periodo"
+                name="periodo"
+                placeholder="Ex: Manhã, Tarde, 2024.1"
+                value={currentTurma.periodo || ''}
+                onChange={handleInputChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-white p-2"
+              />
+            </div>
+          </div>
+          <div>
+            <label htmlFor="modal-observacoes" className="block text-sm font-medium text-gray-700">Observações (opcional)</label>
+            <textarea
+              id="modal-observacoes"
+              name="observacoes"
+              value={currentTurma.observacoes || ''}
+              onChange={handleInputChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-white p-2"
+              rows={3}
+            ></textarea>
+          </div>
+          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 mt-4">
+            <button
+              type="button"
+              onClick={resetForm}
+              className="inline-flex justify-center py-2 px-5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="inline-flex justify-center py-2 px-5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+            >
+              {isEditing ? 'Salvar Alterações' : 'Adicionar Turma'}
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+    </div> // End of main return div
   );
 };
 
